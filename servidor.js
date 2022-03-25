@@ -16,8 +16,8 @@ app.get("/productos", (req, res) =>{
 
 app.get("/productoRandom", (req, res) =>{
     const fs= require("fs")
-    let tempFile = JSON.parse(fs.readFileSync(this.filename, "utf-8"))
-    productos.getById(Math.round(MAth.random() * ((tempFile.length) - 0 + 1)))
+    let tempFile = JSON.parse(fs.readFileSync("./productos.js", "utf-8"))
+    productos.getById(Math.round(Math.random() * ((tempFile.length) - 0 + 1)))
    
 })
 
