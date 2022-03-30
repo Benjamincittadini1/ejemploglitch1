@@ -1,24 +1,25 @@
-const express = require('express')
-const { json } = require('express/lib/response')
-const productos = require("./productos")
-
-let prodParseado = JSON.stringify(productos)
+const fs = require("fs")
+const express = require("express")
+const { json } = require("express/lib/response")
+const Container = require("./index")
+const container = new Container("./productos.txt")
 const app = express()
+
 
 app.get("/", (req, res) =>{
     res.send(`<h1>HOLA BUENAS NOCHES</h1>`)
 })
 
 
-app.get("/productos", (req, res) =>{
-    res.send(prodParseado)
+app.get("/productos", async (req, res) =>{
+    res.send(await container.getAll())
 })
 
-app.get("/productoRandom", (req, res) =>{
-    const fs= require("fs")
-    let tempFile = JSON.parse(fs.readFileSync("./productos.js", "utf-8"))
-    productos.getById(Math.round(Math.random() * ((tempFile.length) - 0 + 1)))
-   
+app.get("/productoRandom", async (req, res) =>{
+    let products = await container.getAll()
+    let productParse = JSON.parse(products)
+    let numAl = Math.floor(Math.random() * productParse.length)
+    res.send(productParse[numAl])
 })
 
 const PORT = 8080 
