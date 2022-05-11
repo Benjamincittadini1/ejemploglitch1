@@ -1,26 +1,19 @@
 const fs = require("fs")
 const express = require("express")
-const { json } = require("express/lib/response")
-const Container = require("./index")
-const container = new Container("./productos.txt")
 const app = express()
+const morgan = require ("morgan")
+const routesProducts = require("./routesProductos")
 
 
-app.get("/", (req, res) =>{
-    res.send(`<h1>HOLA BUENAS NOCHES</h1>`)
-})
+app.use(morgan("dev"))
+app.use(express.json())
+app.use(express.urlencoded({ extended : true }))
+app.use(express.static(__dirname+"/public"))
+app.use("/api/productos", routesProducts)
+app.use("/api/productos/:id", routesProducts)
 
 
-app.get("/productos", async (req, res) =>{
-    res.send(await container.getAll())
-})
 
-app.get("/productoRandom", async (req, res) =>{
-    let products = await container.getAll()
-    let productParse = JSON.parse(products)
-    let numAl = Math.floor(Math.random() * productParse.length)
-    res.send(productParse[numAl])
-})
 
 const PORT = 8080 
 
